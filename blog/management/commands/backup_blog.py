@@ -26,11 +26,11 @@ class Command(BaseCommand):
             writer = csv.writer(file)
 
             # ヘッダーの書き込み
-            header = [field.name for field in Blog._meta.fields]
+            header = [field.name for field in Post._meta.fields]
             writer.writerow(header)
 
             # Blogテーブルの全データを取得
-            blogs = Blog.objects.all()
+            blogs = Post.objects.all()
 
             # データ部分の書き込み
             for blog in blogs:

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.mail import EmailMessage
 from django.forms import ModelForm, TextInput, Textarea
-from blog.models import Comment, Blog     # Reply
+from blog.models import Comment, Post     # Reply
 from markdownx.fields import MarkdownxFormField
 from markdownx.widgets import MarkdownxWidget
 
@@ -98,7 +98,7 @@ class BlogCreateForm(forms.ModelForm):
             'text' : MarkdownxWidget(attrs={'class': 'textarea'})
         }
 
-    def __init__(self. *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'

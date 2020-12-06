@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from .settings_common import *
 
-SECRET_KEY = 'jphlbna!6_)(*w#r%k+--%m$j95*4@_cu68!(#4$qci7^l%i9a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -33,10 +32,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'website',
-#        'USER': os.environ.get('DB_USER'),
-#        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'USER': 'postgres',
-        'PASSWORD': 'HIRO5152',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': '',
         'POST': '',
     }
@@ -55,3 +52,49 @@ AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
 EMAIL_BACKEND = 'django_ses.SESBackend'
 
+
+# ロギングの設定
+LOGGING = {
+    'version': 1,  # 1固定
+    'disable_existing_loggers': False,
+
+    # ロガーの設定
+    'loggers': {
+        # Djangoが利用するロガー
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+
+        # blogアプリケーションが利用するロガー
+        'blog': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+    },
+
+    # ハンドラの設定
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'formatter': 'prod',
+            'when': 'D',
+            'interval': 1,
+            'backupCount': 7,
+        },
+    },
+
+    # フォーマッタの設定
+    'formatters': {
+        'prod': {
+            'format': '\t'.join([
+                '%(asctime)s',
+                '[%(levelname)s]',
+                '%(pathname)s(Line:%(lineno)d)',
+                '%(message)s'
+            ])
+        },
+    }
+}

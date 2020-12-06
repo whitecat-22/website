@@ -28,7 +28,7 @@ class StaticViewSitemap(Sitemap):
     """
     静的ページのサイトマップ
     """
-    changefreq = "daily"
+    changefreq = "blog"
     priority = 0.5
 
     def items(self):
