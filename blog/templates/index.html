@@ -1,0 +1,95 @@
+{% extends 'base.html %'}
+
+{% load static %}
+
+{% block title %}トップページ | {{ block.super }}{% endblock %}
+
+{% block description %}しろねこプロダクト：自作のサービス紹介やポートフォリオ、ブログを運営していきます。{% endblock %}
+
+
+{% block header %}
+<header>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+
+            <!-- Slide One - Set the background image for this slide in the line below -->
+            <div class="carousel-item active" style="background-image: src(static/img/andy-holmes-rCbdp8VCYhQ-unsplash)">
+                <div class="carousel-caption d-none d-md-block">
+                    <h3>？しろねこ？</h3>
+                    <p>へび遣いを目指して邁進中！</p>
+                </div>
+            </div>
+
+            <!-- Slide Two - Set the background image for this slide in the line below -->
+<!--            <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')"> -->
+                <div class="carousel-item" style="background-image: src(static/img/mason-kimbarovsky--GlDIYT3qSc-unsplash)">
+                <div class="carousel-caption d-none d-md-block">
+                    <h3>しろねこプロダクト</h3>
+                    <p>今後しろねこの制作物を順次掲載していきます</p>
+                </div>
+            </div>
+
+            <!-- Slide Three - Set the background image for this slide in the line below -->
+            <div class="carousel-item" style="background-image: src(static/img/smit-shah-I-U97OozkGs-unsplash)">
+                <div class="carousel-caption d-none d-md-block">
+                    <h3>しろねこブログ</h3>
+                    <p>徒然なるままに 日暮らし 画面にむかひて 心にうつりゆくよしなしごとを そこはかとなく書きつくれば あやしうこそものぐるほしけれ</p>
+                </div>
+            </div>
+        </div>
+
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</header>
+{% endblock %}
+
+{% block contents %}
+<!-- Page Content -->
+<div class="container">
+
+<!--    <h1 class="my-4">Welcom to White Cat's Cafe</h1> -->
+        <!-- Maeketing Icons Section -->
+<!--        <div class="row"> -->
+<!--            {% include "snippets/main_post_list.html" %} -->
+<!--        </div> -->
+
+        <!-- Portfolio Section -->
+<!--        <h2>Portfolio</h2> -->
+<!--        <div class="row"> -->
+<!--            {% include "snippets/main_portfolio_list.html" %} -->
+<!--        </div> -->
+
+<!--        </div> -->
+
+
+    <!-- Features Section -->
+    <div class="row">
+        {% include "snippets/features_section.html" %}
+    </div>
+
+    <hr>
+    <!-- Call to Action Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p>
+                "記載内容の不備、誤り等がございましたら、お問い合わせフォームよりご連絡くださいませ。"
+            </p>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-lg btn-secondary btn-block" href="{% url 'blog':contact' %}" ></a>Contact</a>
+        </div>
+    </div>
+</DIV>
+{% endblock %}

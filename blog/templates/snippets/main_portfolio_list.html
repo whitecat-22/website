@@ -1,0 +1,55 @@
+{% for post in object_list %}
+
+    <style type="text/css">
+    .textOverflow {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow:ellipsis;
+        }
+    </style>
+
+    {% if user.is_authenticated or portfolio.is_public %}
+        <div class="col-lg-4 col-sm-6 portfplio-item">
+            <div class="card-h-100">
+
+            {% if post.image %}
+                <a href="{% url 'web:portfolio_detail' post.id %}">
+                    <img class="card-img-top" src="{{ portfolio.image.url }}" alt="{{ portfolio.title }}">
+                </a>
+            {% else% }
+                <a href="{% url 'web:portfolio_detail' post.id %}" class="disabled">
+                    <img class="card-img-top" src="/img/default_700_400.jpg" alt>
+                </a>
+            {% endif %}
+
+                <div class="card-body">
+                    {% if not portfolio.is_public %}
+                        <h5><span class="badge badge-secondary">Draft</span></h5>
+                    {% endif %}
+                        <h4 class="card-title">
+                            <a href="{% url 'web:portfolio_detail' post.id %}">{{ portfolio.title }}</a>
+                        </h4>
+                        <p class="card-text">
+                            {{ portfolio.content|safe }}
+                        </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% empty %}
+        <div class="col-lg-4 col-sm-6 portfplio-item">
+            <div class="card-h-100">
+                <a href="{% url 'web:portfolio_detail' post.id %}" class="disabled">
+                    <img class="card-img-top" src="{% static 'img/default_700_400.jpg' %}" alt="UnderConstraction">
+                </a>
+                <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="{% url 'web:portfolio_detail' post.id %}" class="disabled">Under Constraction</a>
+                        </h4>
+                        <p class="card-text">
+                        </p>
+                </div>
+            </div>
+        </div>
+{% endfor %}

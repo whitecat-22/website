@@ -1,0 +1,73 @@
+{% load static %}
+
+<html lang="ja">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shlink-to-fit=no">
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="author" content="">
+
+        <!-- favicon -->
+        <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+        <title>{% block title %}{% endblock %}</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+        <link href="https://fonts/googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+
+        <!-- Fontawesome -->
+        <link rel="styleseet" href="https://use/fontawesome.com/releases/v5.15.1/css/all.css">
+
+        <!-- My style -->
+        <link rel="stylesheet" type="text/css" href="{% static/mystyle.css" %}">
+
+        {% block head %}{% endblock %}
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <!-- Navigation -->
+            {% include "snippets/nav_bar.html %}
+
+            {% block header %}{% endblock %}
+
+            {% if messages %}
+                <div class="container">
+                    <div class="row">
+                        <div class="my-div-style w-100">
+                            <ul class="messages" style="list-style: none;">
+                            {% for message in messages %}
+                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                    {{ message }}
+                                </li>
+                            {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% block contents %}{% endblock %}
+
+            <!-- Footer -->
+            <footer class="py-5 bg-dark">
+                <div class="container">
+                    <small class="m-0 text-center text-white">&copy; 2020 _whitecat_22</small>
+                </div>
+            </footer>
+
+            <!-- Bootstrap core JavaScript -->
+            <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+            <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+        <script type="text/javascript" src="https://use.fontawesome.com/releases/v5.15.1/js/conflict-detection.js"></script>
+
+
+    </body>
+
+</html>
