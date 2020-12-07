@@ -5,7 +5,7 @@ import os
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from ...models import Post
+from ...models import BlogPost
 
 
 class Command(BaseCommand):
@@ -26,11 +26,11 @@ class Command(BaseCommand):
             writer = csv.writer(file)
 
             # ヘッダーの書き込み
-            header = [field.name for field in Post._meta.fields]
+            header = [field.name for field in BlogPost._meta.fields]
             writer.writerow(header)
 
             # Blogテーブルの全データを取得
-            blogs = Post.objects.all()
+            blogs = BlogPost.objects.all()
 
             # データ部分の書き込み
             for blog in blogs:
@@ -39,12 +39,11 @@ class Command(BaseCommand):
                                  blog.category,
                                  blog.tag,
                                  blog.content,
-                                 blog.description,
                                  str(blog.created_at),
                                  str(blog.updated_at),
                                  str(blog.published_at),
                                  blog.is_public,
-                                 ])
+                ])
 
         # 保存ディレクトリのファイルリストを取得
         files = os.listdir(settings.BACKUP_PATH)
