@@ -1,12 +1,12 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 
 from django.urls import reverse_lazy
 from django.views import generic
 
-from blog.forms import ContactForm, CommentForm  # ReplyForm
+from blog.forms import ContactForm , CommentForm, BlogCreateForm  # ReplyForm
 
 from django.contrib import messages
 
@@ -14,32 +14,32 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.db.models import Count, Q
 from django.http import Http404
-from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+#from django.views.generic.detail import DetailView
+#from django.views.generic.list import ListView
+#from django.views.generic.edit import CreateView
 
-from blog.models import Post, Category, Tag
+from blog.models import Category, Tag, BlogPost, Comment  # Reply
 
 
 logger = logging.getLogger(__name__)
 
 
 class IndexView(generic.TemplateView):
-    template_name = "index.html"
+    template_name = 'index.html'
 
 
 class BlogListView(generic.ListView):
-    model = Post
-    template_name = "blog.html"
+    model = BlogPost
+    template_name = 'blog.html'
     paginate_by = 3
 
     def get_queryset(self):
-        blogs = Post.objects.order_by('-created_at')
+        blogs = BlogPost.objects.order_by('-created_at')
         return blogs
 
 
-class SearchPostView(ListView):
-    model = Post
+class SearchPostView(generic.ListView):
+    model = BlogPost
     template_name = 'search_post.html'
     paginate_by = 3
 
@@ -65,10 +65,10 @@ class SearchPostView(ListView):
 
 
 class BlogDetailView(generic.DetailView):
-    model = Post
-    slug_field = "title"
-    slug_url_kwarg = "title"
-    template_name = "blog_detail.html"
+    model = BlogPost
+    slug_field = 'title'
+    slug_url_kwarg = 'title'
+    template_name = 'blog_detail.html'
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -77,18 +77,18 @@ class BlogDetailView(generic.DetailView):
         return obj
 
 
-class CategoryListView(ListView):
+class CategoryListView(generic.ListView):
     queryset = Category.objects.annotate(
-        num_posts=Count('post', filter=Q(post__is_public=True)))
+        num_posts=Count('blog_post', filter=Q(blog_post__is_public=True)))
 
 
-class TagListView(ListView):
+class TagListView(generic.ListView):
     queryset = Tag.objects.annotate(num_posts=Count(
-        'post', filter=Q(post__is_public=True)))
+        'blog_post', filter=Q(blog_post__is_public=True)))
 
 
-class CategoryPostView(ListView):
-    model = Post
+class CategoryPostView(generic.ListView):
+    model = BlogPost
     template_name = 'category_post.html'
 
     def get_queryset(self):
@@ -103,8 +103,8 @@ class CategoryPostView(ListView):
         return context
 
 
-class TagPostView(ListView):
-    model = Post
+class TagPostView(generic.ListView):
+    model = BlogPost
     template_name = 'tag_post.html'
 
     def get_queryset(self):
@@ -120,21 +120,21 @@ class TagPostView(ListView):
 
 
 
-class CommentFormView(CreateView):
+class CommentFormView(generic.CreateView):
     model = Comment
     form_class = CommentForm
 
     def form_valid(self, form):
         comment = form.save(commit=False)
         post_pk = self.kwargs['pk']
-        comment.post = get_object_or_404(Post, pk=post_pk)
+        comment.post = get_object_or_404(BlogPost, pk=post_pk)
         comment.save()
-        return redirect('blog:post_detail', pk=post_pk)
+        return redirect('blog:blog_detail', pk=post_pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post_pk = self.kwargs['pk']
-        context['post'] = get_object_or_404(Post, pk=post_pk)
+        context['blog_post'] = get_object_or_404(BlogPost, pk=post_pk)
         return context
 
 
@@ -142,14 +142,14 @@ class CommentFormView(CreateView):
 #def comment_approve(request, pk):
 #    comment = get_object_or_404(Comment, pk=pk)
 #    comment.approve()
-#    return redirect('blog:post_detail', pk=comment.post.pk)
+#    return redirect('blog:blog_detail', pk=comment.post.pk)
 
 
 @login_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
-    return redirect('blog:post_detail', pk=comment.post.pk)
+    return redirect('blog:blog_detail', pk=comment.post.pk)
 
 
 #class ReplyFormView(CreateView):
@@ -161,7 +161,7 @@ def comment_remove(request, pk):
 #        comment_pk = self.kwargs['pk']
 #        reply.comment = get_object_or_404(Comment, pk=comment_pk)
 #        reply.save()
-#        return redirect('blog:post_detail', pk=reply.comment.post.pk)
+#        return redirect('blog:blog_detail', pk=reply.comment.post.pk)
 #
 #    def get_context_data(self, **kwargs):
 #        context = super().get_context_data(**kwargs)
@@ -174,18 +174,18 @@ def comment_remove(request, pk):
 #def reply_approve(request, pk):
 #    reply = get_object_or_404(Reply, pk=pk)
 #    reply.approve()
-#    return redirect('blog:post_detail', pk=reply.comment.post.pk)
+#    return redirect('blog:blog_detail', pk=reply.comment.post.pk)
 #
 #
 #@login_required
 #def reply_remove(request, pk):
 #    reply = get_object_or_404(Reply, pk=pk)
 #    reply.delete()
-#    return redirect('blog:post_detail', pk=reply.comment.post.pk)
+#    return redirect('blog:blog_detail', pk=reply.comment.post.pk)
 
 
 class ContactView(generic.FormView):
-    template_name = "contact.html"
+    template_name = 'contact.html'
     form_class = ContactForm
     success_url = reverse_lazy('blog:contact')
 
@@ -197,10 +197,10 @@ class ContactView(generic.FormView):
 
 
 class BlogCreateView(LoginRequiredMixin, generic.CreateView):
-    model : Post
+    model = BlogPost
     template_name = 'blog_create.html'
     form_class = BlogCreateForm
-    success_url = reverse_lazy('blog:Blog')
+    success_url = reverse_lazy('blog:blog')
 
     def form_valid(self, form):
         blog = form.save(commit=False)
@@ -213,8 +213,9 @@ class BlogCreateView(LoginRequiredMixin, generic.CreateView):
         messages.error(self.request, 'ブログの投稿に失敗しました。')
         return super().form_invalid(form)
 
+
 class BlogUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model : Post
+    model = BlogPost
     template_name = 'blog_update.html'
     form_class = BlogCreateForm
 
@@ -231,7 +232,7 @@ class BlogUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 
 class BlogDeleteView(LoginRequiredMixin, generic.DeleteView):
-    model : Post
+    model = BlogPost
     template_name = 'blog_delete.html'
     success_url = reverse_lazy('blog:blog')
 
