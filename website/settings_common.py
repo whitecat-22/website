@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-from pathlib import Path
+#from pathlib import Path
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -70,7 +70,7 @@ ROOT_URLCONF = 'website.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,7 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'dbsite.context_processors.common',
+                'website.context_processors.common',
             ],
         },
     },
@@ -121,8 +121,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRD = True
 
 # ログイン/ログアウト後の遷移先を設定
-LOGOIN_REDIRECT_URL = 'website:index'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+LOGOIN_REDIRECT_URL = 'blog:index'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account:login'
 
 # ログアウトリンクのクリック一度でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
@@ -139,7 +139,7 @@ DEFAULT_FROM_EMAIL = 'gattionobianco22@gmail.com'
 
 LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTF-8'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 

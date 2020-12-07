@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import static
-from .feeds import RssLatestPostsFeed, AtomLatestPostsFeed
 from django.contrib.sitemaps.views import sitemap
+from .feeds import RssLatestPostsFeed, AtomLatestPostsFeed
 from .sitemaps import (
     BlogPostSitemap,
     StaticViewSitemap,
@@ -44,4 +44,4 @@ urlpatterns = [
 ]
 
 # 開発サーバーでメディアを配信できるようにする設定
-urlpatterns = += static(settings_common.MEDIA_URL, document_root=settings_dev.MEDIA_ROOT)
+urlpatterns += static(settings_common.MEDIA_URL, document_root=settings_dev.MEDIA_ROOT)
